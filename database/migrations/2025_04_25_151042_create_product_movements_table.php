@@ -17,9 +17,12 @@ return new class extends Migration
             $table->string('to_location')->nullable();
             $table->string('product_id');
             $table->integer('qty');
+            $table->timestamp('timestamp');
             $table->timestamps();
-            $table->foreign('from_location')->references('location_id')->on('locations')->nullOnDelete();
-            $table->foreign('to_location')->references('location_id')->on('locations')->nullOnDelete();
+
+
+            $table->foreign('from_location')->references('location_id')->on('locations')->nullable();
+            $table->foreign('to_location')->references('location_id')->on('locations')->nullable();
             $table->foreign('product_id')->references('product_id')->on('products')->cascadeOnDelete();
 
         });

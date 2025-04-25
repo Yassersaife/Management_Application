@@ -15,6 +15,6 @@ class Product extends Model
         'name',
     ];
     public function Movements(){
-        return $this->hasMany(ProductMovement::class,'product_id');
+        return $this->hasMany(ProductMovement::class,'product_id', 'product_id');
     }
 }

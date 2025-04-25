@@ -17,11 +17,11 @@ class Location extends Model
 
     public function inMovements()
     {
-        return $this->hasMany(ProductMovement::class,'from_location');
+        return $this->hasMany(ProductMovement::class,'from_location', 'location_id');
     }
     
     public function outMovements()
     {
-        return $this->hasMany(ProductMovement::class,'to_location');
+        return $this->hasMany(ProductMovement::class,'to_location', 'location_id');
     }
 }
