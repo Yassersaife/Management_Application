@@ -1,4 +1,3 @@
-<!-- resources/views/products/edit.blade.php -->
 @extends('master')
 
 @section('title', 'Edit Product')

@@ -31,11 +31,11 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
-        $request->vaildate([
-            'location_id' => 'required|unique:locations|max:255',
+        $request->validate([
+            'location_id' => 'unique:locations|max:255',
             'name' => 'required',
         ]);
-        Location::created([
+        Location::create([
             'location_id' => $request->location_id ??Str::uuid(),
             'name' => $request->name,
         ]);

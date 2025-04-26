@@ -13,7 +13,7 @@
                     <a class="nav-link @yield('products_active')" href="{{ route('products.index') }}">Products</a>
                 </li>
                 <li class="nav-item mx-3">
-                    <a class="nav-link" href="{{ route('locations.index') }}">Locations</a>
+                    <a class="nav-link @yield('Location_active')" href="{{ route('locations.index') }}">Locations</a>
                 </li>
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ route('movements.index') }}">Product Movements</a>
