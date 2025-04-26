@@ -10,7 +10,7 @@ class Location extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $filblable=[
+    protected $fillable=[
         'location_id',
         'name',
     ];

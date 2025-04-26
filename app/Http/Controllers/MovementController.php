@@ -79,7 +79,7 @@ class MovementController extends Controller
         if($request->from_location == null && $request->to_location == null){
             return redirect()->back()->with('error', 'Please select at least one location.');
            }
-         ProductMovement::update($movements);
+           $productMovement->update($movements);
            return redirect()->route('movements.index')->with('success', 'Movement updated successfully.');
 
     }

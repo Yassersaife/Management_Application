@@ -32,10 +32,10 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|unique:products|max:255',
+            'product_id' => 'unique:products|max:255',
             'name' => 'required',
         ]);
-        Product::created([
+        Product::create([
             'product_id'=>$request->product_id ?? Str::uuid(),
             'name'=>$request->name,
         ]);
@@ -67,7 +67,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        $request->vaildate([
+        $request->validate([
             'name' => 'required|string|max:255',
         ]);
        
