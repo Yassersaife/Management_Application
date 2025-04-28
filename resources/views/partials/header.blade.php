@@ -16,7 +16,7 @@
                     <a class="nav-link @yield('Location_active')" href="{{ route('locations.index') }}">Locations</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link" href="{{ route('movements.index') }}">Product Movements</a>
+                    <a class="nav-link @yield('movements_active')" href="{{ route('movements.index') }}">Product Movements</a>
                 </li>
 
             </ul>

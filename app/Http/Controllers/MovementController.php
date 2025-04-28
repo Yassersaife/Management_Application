@@ -7,6 +7,7 @@ use App\Http\Requests\StoreMovementRequest;
 use App\Models\Location;
 use App\Models\Product;
 use App\Models\ProductMovement;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -17,7 +18,7 @@ class MovementController extends Controller
      */
     public function index()
     {
-        $movements = ProductMovement::with(['product', 'fromLocation', 'toLocation'])->get();
+        $movements = ProductMovement::with('product')->get();
         return view('movements.index', compact('movements'));
 
     }
@@ -37,49 +38,62 @@ class MovementController extends Controller
      */
     public function store(StoreMovementRequest $request)
     {
-       $movements=$request->validated();
-       $movements['movement_id'] = Str::uuid();
-       $movements['timestamp'] = now();
-       if($request->from_location == null && $request->to_location == null){
-        return redirect()->back()->with('error', 'Please select at least one location.');
-       }
-       
-       ProductMovement::create($movements);
-         return redirect()->route('movements.index')->with('success', 'Movement created successfully.');
-           
+        try{
+            $movements=$request->validated();
+            $movements['movement_id'] = $request->movement_id ??Str::uuid();
+            if($request->from_location == null && $request->to_location == null){
+             return back()->withErrors(['movement'=>'Please select at least one location.']);
+            }
+
+            if($request->from_location)
+            {
+                $locationInputBalance = ProductMovement::where("product_id", $request->product_id)->where("to_location", $request->from_location)->sum("qty");
+                $locationOutputBalance = ProductMovement::where("product_id", $request->product_id)->where("from_location", $request->from_location)->sum("qty");
+                $total = $locationInputBalance - $locationOutputBalance;
+                if($total < $request->qty){
+                    return response()->json(["error" => "there is no enough balance in the location"], 400);
+                }
+            }
+
+            ProductMovement::create($movements);
+              return redirect()->route('movements.index')->with('success', 'Movement created successfully.');
+        }catch(Exception $ex){
+            \Log::error($ex->getMessage());
+            return response()->json(["error" => $ex->getMessage()], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ProductMovement $productMovement)
+    public function show(ProductMovement $movement)
     {
-        return view('movements.show', compact('productMovement'));
+        return view('movements.show', compact('movement'));
     }
    
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ProductMovement $productMovement)
+    public function edit(ProductMovement $movement)
     {
         $products = Product::all();
         $locations = Location::all();
-        return view('movements.edit', compact('productMovement', 'products', 'locations'));
+        return view('movements.edit', compact('movement', 'products', 'locations'));
     }
     
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreMovementRequest $request,ProductMovement $productMovement)
+    public function update(StoreMovementRequest $request,ProductMovement $movement)
     {
         $movements=$request->validated();
-        $movements['movement_id'] =$productMovement->movement_id;
+        $movements['movement_id'] =$movement->movement_id;
         if($request->from_location == null && $request->to_location == null){
             return redirect()->back()->with('error', 'Please select at least one location.');
            }
-           $productMovement->update($movements);
+           $movement->update($movements);
            return redirect()->route('movements.index')->with('success', 'Movement updated successfully.');
 
     }
@@ -87,9 +101,9 @@ class MovementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductMovement $productMovement)
+    public function destroy(ProductMovement $movement)
     {
-        $productMovement->delete();
+        $movement->delete();
         return redirect()->route('movements.index')->with('success', 'Movement deleted successfully.');
     }
 }

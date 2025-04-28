@@ -5,7 +5,7 @@
 @section('content')
     <div class=' d-flex justify-content-between my-2 align-items-center'>
         <h1>Locations</h1>
-        <a href="{{ route('locations.create') }}" class="btn btn-primary">Add Location</a>
+        <a href="{{ route('locations.create') }}" class="btn btn-primary">Add New Location</a>
     </div>
     <div class="card">
 
