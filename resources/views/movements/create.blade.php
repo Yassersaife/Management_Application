@@ -1,6 +1,9 @@
 @extends('master')
 @section('title', 'New Movement')
 @section('movements_active', 'active bg-light')
+
+
+
 @section('content')
     <div class='card'>
         <div class ='card-header'>
@@ -9,6 +12,7 @@
         <div class='card-body'>
             <form method="POST" action="{{ route('movements.store') }} ">
                 @csrf
+
                 <div class="mb-3">
                     <label for="movement_id" class="form-label">Movement ID (optional)</label>
                     <input type='text' name="movement_id" id="movement_id"
@@ -19,6 +23,8 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
+
+
                 <div class="mb-3">
                     <label for="from_location" class="form-label">From Location</label>
                     <select class="form-control @error('from_location') is-invalid @enderror" id="from_location"
@@ -31,6 +37,7 @@
                             </option>
                         @endforeach
                     </select>
+
                     @error('from_location')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

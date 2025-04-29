@@ -4,8 +4,8 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <h1>Dashboard</h1>
+        <div class="card-header text-black bg-blue-500 p-20 align-items-center">
+            <h1>Inventory Management Dashboard</h1>
         </div>
 
     </div>

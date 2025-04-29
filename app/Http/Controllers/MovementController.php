@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\ProductMovement;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MovementController extends Controller
@@ -18,7 +19,7 @@ class MovementController extends Controller
      */
     public function index()
     {
-        $movements = ProductMovement::with('product')->get();
+        $movements = ProductMovement::with('product')->orderBy("created_at","desc")->get();
         return view('movements.index', compact('movements'));
 
     }
@@ -51,14 +52,14 @@ class MovementController extends Controller
                 $locationOutputBalance = ProductMovement::where("product_id", $request->product_id)->where("from_location", $request->from_location)->sum("qty");
                 $total = $locationInputBalance - $locationOutputBalance;
                 if($total < $request->qty){
-                    return response()->json(["error" => "there is no enough balance in the location"], 400);
+                    return back()->withErrors(["movement" => "there is no enough balance in the location"]);
                 }
             }
 
             ProductMovement::create($movements);
               return redirect()->route('movements.index')->with('success', 'Movement created successfully.');
         }catch(Exception $ex){
-            \Log::error($ex->getMessage());
+            Log::error($ex->getMessage());
             return response()->json(["error" => $ex->getMessage()], 500);
         }
     }

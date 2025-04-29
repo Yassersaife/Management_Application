@@ -18,6 +18,9 @@
                 <li class="nav-item ">
                     <a class="nav-link @yield('movements_active')" href="{{ route('movements.index') }}">Product Movements</a>
                 </li>
+                <li class="nav-item ">
+                    <a class="nav-link @yield('report_active')" href="{{ route('report') }}">Report</a>
+                </li>
 
             </ul>
 
